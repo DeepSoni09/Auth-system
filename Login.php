@@ -1,6 +1,10 @@
 <?php
 
 include 'Database-Connection.php';
+session_start();
+if(isset($_SESSION['loggedin']) && $_SESSION['loggedin']==true){
+    header("Location: index.php?alreadyLoggedin=true");
+}
 
 $notexists = false;
 $wrongpass = false;

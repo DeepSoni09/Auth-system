@@ -1,7 +1,7 @@
 <nav class="bg-white w-full top-0 left-0">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="index.php" class="flex items-center">
-                <img src="https://e7.pngegg.com/pngimages/344/876/png-clipart-user-profile-computer-icons-login-authentication-secure-miscellaneous-text.png" class="h-8 mr-3" alt="Flowbite Logo">
+                <img src="https://e7.pngegg.com/pngimages/344/876/png-clipart-user-profile-computer-icons-login-authentication-secure-miscellaneous-text.png" class="h-8 mr-3" alt="">
                 <span class="self-center text-2xl font-semibold whitespace-nowrap text-gray-600">Auth System</span>
             </a>
             <div class="flex md:order-2">

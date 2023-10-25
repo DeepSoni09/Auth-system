@@ -2,6 +2,10 @@
 include 'Database-Connection.php';
 session_start();
 
+if(!isset($_SESSION['loggedin']) && $_SESSION['loggedin']!=true){
+    header("Location: Login.php?loginFirst=true");
+}
+
 if (isset($_REQUEST['Updated-Details'])) {
     $Updated_FirstName = $_REQUEST['FirstName'];
     $Updated_LastName = $_REQUEST['LastName'];

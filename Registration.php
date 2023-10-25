@@ -1,5 +1,10 @@
 <?php
 include 'Database-Connection.php';
+session_start();
+
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+    header("Location: index.php?alreadyLoggedin=true");
+}
 
 $alreadyexists = false;
 $signin = false;
@@ -7,32 +12,28 @@ $passnotmatch = false;
 
 
 if (isset($_REQUEST['Register'])) {
-    $Password = trim($_REQUEST["Password"]);
+
     $ConfirmPassword = trim($_REQUEST["Confirm-Password"]);
 
 
     if (empty($_REQUEST["FirstName"])) {
         $FirstNameEmpty = "*FirstName is required!";
         $err1 = '1';
-
     } else if (!ctype_alpha($_REQUEST["FirstName"])) {
         $FirstNameLetterOnly = "Only letters allowed!";
         $err2 = 1;
     } else {
         $FirstName = trim($_REQUEST["FirstName"]);
-
     }
 
     if (empty($_REQUEST["LastName"])) {
         $LastNameEmpty = "*LastName is required!";
         $err3 = 1;
-
     } else if (!ctype_alpha($_REQUEST["LastName"])) {
         $LastNameLetterOnly = "Only letters allowed!";
         $err4 = 1;
     } else {
         $LastName = trim($_REQUEST["LastName"]);
-
     }
 
     if (empty($_REQUEST["Email"])) {
@@ -43,10 +44,19 @@ if (isset($_REQUEST['Register'])) {
         $err6 = 1;
     } else {
         $Email = trim($_REQUEST["Email"]);
-
     }
 
-    if (isset($FirstName) && isset($LastName) && isset($Email)) {
+    if (empty($_REQUEST["Password"])) {
+        $PasswordEmpty = "*Password cannot be empty!";
+        $err7 = 1;
+    } else if ($_REQUEST["Password"] != $_REQUEST["Confirm-Password"]) {
+        $NotEqualPassword = "Password did not match";
+        $err8 = 1;
+    } else {
+        $Password = trim($_REQUEST["Password"]);
+    }
+
+    if (isset($FirstName) && isset($LastName) && isset($Email) && isset($Password)) {
 
 
         $sql_name = "SELECT * FROM `user_data` WHERE Email='$Email';";
@@ -62,17 +72,13 @@ if (isset($_REQUEST['Register'])) {
 
                 if ($result) {
                     $signin = true;
-                    
+
                     header("Location: Login.php?registerSuccess=true");
-
-
                 }
             } else {
                 $passnotmatch = true;
             }
         }
-
-
     }
 }
 
@@ -140,9 +146,9 @@ if ($passnotmatch) {
 
 <body>
 
-<?php 
-include 'Navbar.php';
-?>
+    <?php
+    include 'Navbar.php';
+    ?>
 
 
     <div class="p-10">
@@ -152,9 +158,7 @@ include 'Navbar.php';
             <form action="Registration.php" method="post">
                 <div>
                     <label class="block font-semibold" for="name">FirstName</label>
-                    <input
-                        class="w-full shadow-inner bg-gray-100 rounded-lg placeholder-black text-2xl p-4 border-none block mt-1 w-full"
-                        id="name" type="text" name="FirstName">
+                    <input class="w-full shadow-inner bg-gray-100 rounded-lg placeholder-black text-2xl p-4 border-none block mt-1 w-full" id="name" type="text" name="FirstName">
                     <div style="color:red;">
                         <?php if (isset($err1)) {
                             echo $FirstNameEmpty;
@@ -165,9 +169,7 @@ include 'Navbar.php';
                 </div>
                 <div class="mt-4">
                     <label class="block font-semibold" for="name">LastName</label>
-                    <input
-                        class="w-full shadow-inner bg-gray-100 rounded-lg placeholder-black text-2xl p-4 border-none block mt-1 w-full"
-                        id="name" type="text" name="LastName">
+                    <input class="w-full shadow-inner bg-gray-100 rounded-lg placeholder-black text-2xl p-4 border-none block mt-1 w-full" id="name" type="text" name="LastName">
                     <div style="color:red;">
                         <?php if (isset($err3)) {
                             echo $LastNameEmpty;
@@ -179,9 +181,7 @@ include 'Navbar.php';
 
                 <div class="mt-4">
                     <label class="block font-semibold" for="email">Email</label>
-                    <input
-                        class="w-full shadow-inner bg-gray-100 rounded-lg placeholder-black text-2xl p-4 border-none block mt-1 w-full"
-                        id="email" type="text" name="Email">
+                    <input class="w-full shadow-inner bg-gray-100 rounded-lg placeholder-black text-2xl p-4 border-none block mt-1 w-full" id="email" type="text" name="Email">
                     <div style="color:red;">
                         <?php if (isset($err5)) {
                             echo $EmailRequired;
@@ -193,24 +193,26 @@ include 'Navbar.php';
 
                 <div class="mt-4">
                     <label class="block font-semibold" for="password">Password</label>
-                    <input
-                        class="w-full shadow-inner bg-gray-100 rounded-lg placeholder-black text-2xl p-4 border-none block mt-1 w-full"
-                        id="password" type="password" name="Password">
+                    <input class="w-full shadow-inner bg-gray-100 rounded-lg placeholder-black text-2xl p-4 border-none block mt-1 w-full" id="password" type="password" name="Password">
+                    <div style="color:red;">
+                        <?php if (isset($err7)) {
+                            echo $PasswordEmpty;
+                        } elseif (isset($err8)) {
+                            echo $NotEqualPassword;
+                        }
+                        ?>
+                    </div>
                 </div>
 
                 <div class="mt-4">
                     <label class="block font-semibold" for="password">Confirm Password</label>
-                    <input
-                        class="w-full shadow-inner bg-gray-100 rounded-lg placeholder-black text-2xl p-4 border-none block mt-1 w-full"
-                        id="password" type="password" name="Confirm-Password">
+                    <input class="w-full shadow-inner bg-gray-100 rounded-lg placeholder-black text-2xl p-4 border-none block mt-1 w-full" id="password" type="password" name="Confirm-Password">
                 </div>
 
                 <div class="flex items-center justify-between mt-8">
 
 
-                    <input type="submit"
-                        class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-                        value="Register" name="Register">
+                    <input type="submit" class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" value="Register" name="Register">
                     <a href="Login.php" class="font-semibold">
                         Already registered?
                     </a>
@@ -221,7 +223,7 @@ include 'Navbar.php';
                 <div class="bg-gray-100 p-8 rounded">
                     <h2 class="font-bold text-2xl">Instructions</h2>
                     <ul class="list-disc mt-4 list-inside">
-                        <li>All users must provide a valid email address and password to create an account.</li>
+                        <li>All users must provide a email address and password to create an account.</li>
                         <li>Users must not use offensive, vulgar, or otherwise inappropriate language in their username
                             or profile information</li>
                         <li>Users must not create multiple accounts for the same person.</li>
@@ -235,6 +237,7 @@ include 'Navbar.php';
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+
 </body>
 
 </html>

@@ -2,6 +2,10 @@
 include 'Database-Connection.php';
 session_start();
 
+if(!isset($_SESSION['loggedin']) && $_SESSION['loggedin']!=true){
+  header("Location: Login.php?loginFirst=true");
+}
+
 $updatePasswordSuccess = false;
 $PasswordMatched = false;
 if (isset($_REQUEST['Change-Password'])) {
