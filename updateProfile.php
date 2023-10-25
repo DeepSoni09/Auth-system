@@ -2,7 +2,7 @@
 include 'Database-Connection.php';
 session_start();
 
-if(!isset($_SESSION['loggedin']) && $_SESSION['loggedin']!=true){
+if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
     header("Location: Login.php?loginFirst=true");
 }
 
@@ -13,25 +13,21 @@ if (isset($_REQUEST['Updated-Details'])) {
     if (empty($_REQUEST["FirstName"])) {
         $FirstNameEmpty = "*FirstName is required!";
         $err1 = '1';
-
     } else if (!ctype_alpha($_REQUEST["FirstName"])) {
         $FirstNameLetterOnly = "Only letters allowed!";
         $err2 = 1;
     } else {
         $Updated_FirstName = trim($_REQUEST["FirstName"]);
-
     }
 
     if (empty($_REQUEST["LastName"])) {
         $LastNameEmpty = "*LastName is required!";
         $err3 = 1;
-
     } else if (!ctype_alpha($_REQUEST["LastName"])) {
         $LastNameLetterOnly = "Only letters allowed!";
         $err4 = 1;
     } else {
         $Updated_LastName = trim($_REQUEST["LastName"]);
-
     }
 
     if (empty($_REQUEST["Email"])) {
@@ -42,8 +38,6 @@ if (isset($_REQUEST['Updated-Details'])) {
         $err6 = 1;
     } else {
         $Updated_Email = trim($_REQUEST["Email"]);
-
-
     }
 
     if (isset($Updated_FirstName) && isset($Updated_LastName) && isset($Updated_Email)) {
@@ -57,14 +51,12 @@ if (isset($_REQUEST['Updated-Details'])) {
             $result = mysqli_query($conn, $sql);
             if ($result) {
                 session_unset();
-               session_destroy();
+                session_destroy();
                 header('Location: Login.php?updateProfile=true');
             }
         }
     } else {
-
     }
-
 }
 
 ?>
@@ -88,8 +80,7 @@ if (isset($_REQUEST['Updated-Details'])) {
 
 
     <main id="content" role="main" class="w-full  max-w-md mx-auto p-6">
-        <div
-            class="mt-7 bg-white  rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 border-2 border-indigo-300">
+        <div class="mt-7 bg-white  rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 border-2 border-indigo-300">
             <div class="p-4 sm:p-7">
                 <div class="text-center">
                     <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">Enter Updated Details</h1>
@@ -103,9 +94,7 @@ if (isset($_REQUEST['Updated-Details'])) {
                                 <label for="FirstName" class="block text-sm font-bold ml-1 mb-2 dark:text-white">Enter
                                     FirstName</label>
                                 <div class="relative">
-                                    <input type="text" id="FirstName" name="FirstName"
-                                        class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm"
-                                        aria-describedby="email-error">
+                                    <input type="text" id="FirstName" name="FirstName" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" aria-describedby="email-error">
                                     <div style="color:red;">
                                         <?php if (isset($err1)) {
                                             echo $FirstNameEmpty;
@@ -119,9 +108,7 @@ if (isset($_REQUEST['Updated-Details'])) {
                                 <label for="LastName" class="block text-sm font-bold ml-1 mb-2 dark:text-white">Enter
                                     LastName</label>
                                 <div class="relative">
-                                    <input type="text" id="LastName" name="LastName"
-                                        class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm"
-                                        aria-describedby="email-error">
+                                    <input type="text" id="LastName" name="LastName" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" aria-describedby="email-error">
                                     <div style="color:red;">
                                         <?php if (isset($err3)) {
                                             echo $LastNameEmpty;
@@ -135,9 +122,7 @@ if (isset($_REQUEST['Updated-Details'])) {
                                 <label for="Email" class="block text-sm font-bold ml-1 mb-2 dark:text-white">Enter
                                     Email</label>
                                 <div class="relative">
-                                    <input type="text" id="Email" name="Email"
-                                        class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm"
-                                        aria-describedby="email-error">
+                                    <input type="text" id="Email" name="Email" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" aria-describedby="email-error">
 
                                     <div style="color:red;">
                                         <?php if (isset($err5)) {
@@ -148,8 +133,7 @@ if (isset($_REQUEST['Updated-Details'])) {
                                     </div>
                                 </div>
                             </div>
-                            <input type="submit" value="Update" name="Updated-Details"
-                                class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
+                            <input type="submit" value="Update" name="Updated-Details" class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800">
                         </div>
 
                     </form>

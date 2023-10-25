@@ -2,48 +2,47 @@
 include 'Database-Connection.php';
 session_start();
 
-if(!isset($_SESSION['loggedin']) && $_SESSION['loggedin']!=true){
+if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true) {
   header("Location: Login.php?loginFirst=true");
 }
 
 $updatePasswordSuccess = false;
 $PasswordMatched = false;
 if (isset($_REQUEST['Change-Password'])) {
-  $UpdatedPassword = $_REQUEST['Password'];
+  $UpdatedPassword = trim($_REQUEST['Password']);
 
-  if(empty($UpdatedPassword)){
+  if (empty($UpdatedPassword)) {
     $UpdatedPasswordRequired = "*Password can't be empty";
-    $err1=1;
-  }else{
+    $err1 = 1;
+  } else {
 
-  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 
-    $Email = $_SESSION['Email'];
+      $Email = $_SESSION['Email'];
 
-    $hash = password_hash($UpdatedPassword, PASSWORD_DEFAULT);
-    $sql_name = "SELECT * FROM `user_data` WHERE `Email`='$Email';";
-    $res_name = mysqli_query($conn, $sql_name);
-    if (mysqli_num_rows($res_name) > 0) {
+      $hash = password_hash($UpdatedPassword, PASSWORD_DEFAULT);
+      $sql_name = "SELECT * FROM `user_data` WHERE `Email`='$Email';";
+      $res_name = mysqli_query($conn, $sql_name);
+      if (mysqli_num_rows($res_name) > 0) {
 
-      while ($row = mysqli_fetch_assoc($res_name)) {
+        while ($row = mysqli_fetch_assoc($res_name)) {
 
-        if (password_verify($UpdatedPassword, $row['Password'])) {
-          $PasswordMatched = true;
-        } else {
-          $sql = "UPDATE `user_data` SET `Password` = '$hash' WHERE `user_data`.`Email` = '$Email';";
-          $result = mysqli_query($conn, $sql);
-          if ($result) {
-            $updatePasswordSuccess = true;
-            session_unset();
-            session_destroy();
-            header('Location:Login.php?forgotPass=true');
+          if (password_verify($UpdatedPassword, $row['Password'])) {
+            $PasswordMatched = true;
+          } else {
+            $sql = "UPDATE `user_data` SET `Password` = '$hash' WHERE `user_data`.`Email` = '$Email';";
+            $result = mysqli_query($conn, $sql);
+            if ($result) {
+              $updatePasswordSuccess = true;
+              session_unset();
+              session_destroy();
+              header('Location:Login.php?forgotPass=true');
+            }
           }
         }
       }
     }
   }
-}
-
 }
 
 ?>
@@ -100,10 +99,10 @@ if ($PasswordMatched) {
             <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" name="Password" placeholder="Enter new password" />
 
             <div style="color:red;">
-                            <?php if (isset($err1)) {
-                                echo $UpdatedPasswordRequired;
-                            }  ?>
-                        </div>
+              <?php if (isset($err1)) {
+                echo $UpdatedPasswordRequired;
+              }  ?>
+            </div>
           </div>
 
           <input type="submit" value="Reset Password" name="Change-Password" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
